@@ -4,7 +4,7 @@ A local mind map that tracks your app's building blocks as you build it — powe
 
 Nodes are your features, tech stack, satellites (test projects), and pending items. They move through `pending → active → removed` as your app evolves. One global instance maps all your projects.
 
-![Vibe Map Screenshot](https://placeholder)
+![Vibe Map Screenshot](https://i.imgur.com/hwP0Bj1.png)
 
 ---
 
@@ -22,7 +22,7 @@ Nodes are your features, tech stack, satellites (test projects), and pending ite
 **Requirements:** Node.js 18+
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/vibe-map.git
+git clone https://github.com/nosferatu1/vibe-map.git
 cd vibe-map
 npm install
 npm run dev
