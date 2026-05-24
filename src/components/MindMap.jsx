@@ -11,7 +11,11 @@ import {
   ReactFlowProvider,
   Handle,
   Position,
+  useReactFlow,
+  getNodesBounds,
+  getViewportForBounds,
 } from '@xyflow/react'
+import { toPng } from 'html-to-image'
 import '@xyflow/react/dist/style.css'
 import { computeMindMapLayout, CATEGORY_COLORS } from '../utils/mindMapLayout.js'
 
@@ -106,7 +110,13 @@ function MindMapInner({
   onEdgeDelete,
   selectedProject,
   onSavePositions,
+  onConnect,
+  onNodeMouseEnter,
+  onNodeMouseLeave,
+  onClearSelection,
 }) {
+  const { getNodes } = useReactFlow()
+
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
     return computeMindMapLayout(rawNodes, rawEdges, selectedProject, showRemoved)
   }, [rawNodes, rawEdges, selectedProject, showRemoved])
@@ -168,6 +178,34 @@ function MindMapInner({
     }
   }, [rawNodes, rawEdges, selectedProject, showRemoved, onNodeClick, setNodes, setEdges, onSavePositions])
 
+  // ─── Export PNG ───────────────────────────────────────────────────────────
+  const handleExport = useCallback(() => {
+    const nodesBounds = getNodesBounds(getNodes().filter(n => !n.id.startsWith('__')))
+    const imageWidth = 1600
+    const imageHeight = 900
+    const viewport = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.4, 2, 80)
+
+    const viewport_el = document.querySelector('.react-flow__viewport')
+    if (!viewport_el) return
+
+    toPng(viewport_el, {
+      backgroundColor: '#0A0A0A',
+      width: imageWidth,
+      height: imageHeight,
+      style: {
+        width: `${imageWidth}px`,
+        height: `${imageHeight}px`,
+        transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+      },
+    }).then(dataUrl => {
+      const projectName = selectedProject !== 'all' ? selectedProject : 'vibe-map'
+      const a = document.createElement('a')
+      a.setAttribute('download', `vibe-map-${projectName}.png`)
+      a.setAttribute('href', dataUrl)
+      a.click()
+    })
+  }, [getNodes, selectedProject])
+
   return (
     <div className="mindmap-container">
       <ReactFlow
@@ -177,6 +215,11 @@ function MindMapInner({
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onEdgeClick={onEdgeClick}
+        onConnect={onConnect}
+        onNodeMouseEnter={onNodeMouseEnter}
+        onNodeMouseLeave={onNodeMouseLeave}
+        onPaneClick={() => onClearSelection?.()}
+        connectionMode="loose"
         fitView
         fitViewOptions={{ padding: 0.15 }}
         minZoom={0.1}
@@ -201,10 +244,9 @@ function MindMapInner({
           maskColor="rgba(0,0,0,0.4)"
         />
         <Controls style={{ background: '#1A1A1A', border: '1px solid #333', color: '#ccc' }} />
-        <Panel position="top-right">
-          <button className="auto-layout-btn" onClick={handleAutoLayout}>
-            Auto Layout
-          </button>
+        <Panel position="top-right" style={{ display: 'flex', gap: 8 }}>
+          <button className="auto-layout-btn" onClick={handleExport}>Export PNG</button>
+          <button className="auto-layout-btn" onClick={handleAutoLayout}>Auto Layout</button>
         </Panel>
       </ReactFlow>
     </div>

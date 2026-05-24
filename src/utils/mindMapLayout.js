@@ -219,19 +219,21 @@ function buildProjectLayout(projectName, projectNodes, originX, originY, selecte
 
       expandBbox(leafX - originX, leafY - originY, LEAF_W, LEAF_H)
 
-      // Category → Leaf edge
-      autoEdges.push({
-        id: `edge-${catKey}-${node.id}`,
-        source: catId,
-        target: node.id,
-        sourceHandle: handles.sourceHandle,
-        targetHandle: handles.targetHandle,
-        type: 'smoothstep',
-        pathOptions: { borderRadius: 16 },
-        style: { stroke: catColor, strokeWidth: 1.5, opacity: 0.5 },
-        markerEnd: { type: 'arrowclosed', color: catColor, width: 8, height: 8 },
-        selectable: false,
-      })
+      // Category → Leaf edge (skip tech — tech leaves float free, connected manually)
+      if (catKey !== 'tech') {
+        autoEdges.push({
+          id: `edge-${catKey}-${node.id}`,
+          source: catId,
+          target: node.id,
+          sourceHandle: handles.sourceHandle,
+          targetHandle: handles.targetHandle,
+          type: 'smoothstep',
+          pathOptions: { borderRadius: 16 },
+          style: { stroke: catColor, strokeWidth: 1.5, opacity: 0.5 },
+          markerEnd: { type: 'arrowclosed', color: catColor, width: 8, height: 8 },
+          selectable: false,
+        })
+      }
     }
   }
 

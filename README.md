@@ -97,6 +97,27 @@ All data lives in `server/data/nodes.json` — a plain JSON file on your machine
 
 ---
 
+## Changelog
+
+### v1.1.0 — 2026-05-24
+
+- **Manual tech connections** — Tech stack nodes no longer auto-connect to everything. Hover any node to reveal its handles, then drag to draw a specific connection. Connections are saved automatically.
+- **Selection highlighting** — Click any node to animate its edges (flowing dash), brighten connected nodes, and dim everything else to 25% opacity. Click the canvas background to reset.
+- **Hover-only connections** — Canvas is clean by default with no visible edges. Edges reveal only for the node you're hovering. Selection overrides hover with animation.
+- **Export PNG** — New "Export PNG" button (top-right) captures the full canvas at 1600×900 and downloads it as `vibe-map-[project].png`.
+
+### v1.0.0 — 2026-05-24
+
+- Initial release
+- Four-quadrant mind map layout (features left, tech right, satellites top, pending bottom)
+- Auto Layout with one click
+- Multi-project support with project switcher
+- Node lifecycle: `pending → active → removed`
+- `/vibe-map` Claude Code skill for automatic codebase scanning
+- 100% local — data never leaves your machine
+
+---
+
 ## License
 
 MIT

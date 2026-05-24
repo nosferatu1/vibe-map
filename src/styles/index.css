@@ -681,3 +681,31 @@ body {
   color: #ccc;
   border-color: #444;
 }
+
+/* Visible handles on node hover */
+.react-flow__node:hover .react-flow__handle {
+  opacity: 1 !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: #3B82F6 !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 50% !important;
+  cursor: crosshair !important;
+}
+
+/* Selected node glow */
+.react-flow__node.selected .leaf-node {
+  box-shadow: 0 0 0 2px #60A5FA, 0 0 20px rgba(96, 165, 250, 0.25) !important;
+  border-color: #60A5FA !important;
+}
+.react-flow__node.selected .root-node {
+  box-shadow: 0 0 0 2px #fff, 0 0 24px rgba(99, 102, 241, 0.5) !important;
+}
+.react-flow__node.selected .category-node {
+  box-shadow: 0 0 0 2px currentColor, 0 0 16px rgba(255,255,255,0.1) !important;
+}
+
+/* Edge transition */
+.react-flow__edge path {
+  transition: opacity 0.15s ease, stroke-width 0.15s ease;
+}
